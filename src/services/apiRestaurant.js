@@ -1,6 +1,6 @@
 const API_URL = 'https://react-fast-pizza-api.onrender.com/api';
 
-const getMenu = async () => {
+export const getMenu = async () => {
   const res = await fetch(`${API_URL}/menu`);
 
   // it won't throw error on 400 errors (e.g  when URL is wrong ) so we need to do it manually. this will then go in to the catch block where the message is set
