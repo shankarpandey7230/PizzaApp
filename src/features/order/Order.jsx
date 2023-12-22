@@ -1,44 +1,49 @@
-// Test ID : IIDAST
+import { useLoaderData } from 'react-router';
+import { getOrder } from '../../services/apiRestaurant';
+import {
+  calcMinutesLeft,
+  formatCurrency,
+  formatDate,
+} from '../../utils/helpers';
 
-import { calcMinutes } from '../../utils/helpers';
-const order = {
-  id: 'ABCDEF',
-  customer: 'Shankar',
-  phone: '234567',
-  address: 'Lamachaur, Pokhara, Nepal',
-  priority: true,
-  estimatedDeliver: '2027-94-25T10:00:00',
-  cart: [
-    {
-      pizzaId: 7,
-      name: 'Napoli',
-      quantity: 4,
-      unitPrice: 17,
-      totalPrice: 68,
-    },
-    {
-      pizzaId: 5,
-      name: 'Romana',
-      quantity: 2,
-      unitPrice: 15,
-      totalPrice: 30,
-    },
-    {
-      pizzaId: 3,
-      name: 'Diavola',
-      quantity: 1,
-      unitPrice: 15,
-      totalPrice: 15,
-    },
-  ],
-  position: '-9.000,38.000',
-  orderPrice: 95,
-  priorityPrice: 19,
-};
+// const order = {
+//   id: 'ABCDEF',
+//   customer: 'Shankar',
+//   phone: '123456789',
+//   address: 'Arroios, Lisbon , Portugal',
+//   priority: true,
+//   estimatedDelivery: '2027-04-25T10:00:00',
+//   cart: [
+//     {
+//       pizzaId: 7,
+//       name: 'Napoli',
+//       quantity: 3,
+//       unitPrice: 16,
+//       totalPrice: 48,
+//     },
+//     {
+//       pizzaId: 5,
+//       name: 'Diavola',
+//       quantity: 2,
+//       unitPrice: 16,
+//       totalPrice: 32,
+//     },
+//     {
+//       pizzaId: 3,
+//       name: 'Romana',
+//       quantity: 1,
+//       unitPrice: 15,
+//       totalPrice: 15,
+//     },
+//   ],
+//   position: '-9.000,38.000',
+//   orderPrice: 95,
+//   priorityPrice: 19,
+// };
 
 const Order = () => {
-  // Everyone can search all orders so for privacy reason we are going to exclude the names or address, these are only for the staff,
-
+  const order = useLoaderData();
+  // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const {
     id,
     status,
@@ -49,7 +54,7 @@ const Order = () => {
     cart,
   } = order;
 
-  const deliveryIn = calcMinutes(estimatedDelivery);
+  const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
     <div>
@@ -78,6 +83,11 @@ const Order = () => {
       </div>
     </div>
   );
+};
+
+export const loader = async ({ params }) => {
+  const order = await getOrder(params.orderId);
+  return order;
 };
 
 export default Order;
